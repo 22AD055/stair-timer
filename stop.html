@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>階段チャレンジ - ゴール地点</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>おつかれさま！</h1>
+  <p id="message">タイマーを停止しています...</p>
+  <div id="result"></div>
+
+  <script>
+    // スタート時刻を読み取る（ブラウザ保存された値）
+    const startTime = localStorage.getItem("startTime");
+
+    if (!startTime) {
+      document.getElementById("message").textContent =
+        "⚠️ このページは7階のQRからスタートした後にのみアクセスできます。";
+    } else {
+      const elapsed = ((Date.now() - Number(startTime)) / 1000).toFixed(2);
+      document.getElementById("result").textContent = `あなたのタイム：${elapsed} 秒`;
+
+      // 名前入力＆送信
+      const name = prompt("名前を入力してください（ランキング用）:");
+      if (name) {
+        fetch("【あなたのWebアプリURL】", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name, time: elapsed })
+        })
+        .then(r => r.text())
+        .then(() => {
+          document.getElementById("message").textContent = "記録を送信しました！";
+          localStorage.removeItem("startTime"); // リセット
+        })
+        .catch(() => {
+          document.getElementById("message").textContent = "送信に失敗しました。";
+        });
+      }
+    }
+  </script>
+</body>
+</html>

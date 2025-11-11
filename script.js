@@ -11,15 +11,16 @@ const isValidQR = params.get("start") === "1"; // 7階QRにのみ付与
 if (isValidQR) {
   startTimer();
 } else {
-  message.textContent = "⚠️ このページはQRコード経由でのみ起動できます。";
+  document.getElementById('message').textContent = "⚠️ QRコードからのみ起動できます。";
 }
 
 function startTimer() {
-  message.textContent = "計測中です！階段を降りて2階でQRを読み込んでください。";
-  startTime = Date.now();
-  stopButton.disabled = false;
+  document.getElementById('message').textContent = "計測中！2階のQRを読み込んでください。";
+  const startTime = Date.now();
+  localStorage.setItem("startTime", startTime); // 端末内に保存（ゴールページで使う）
 
-  timerInterval = setInterval(() => {
+  const timerDisplay = document.getElementById('timer');
+  setInterval(() => {
     const elapsed = (Date.now() - startTime) / 1000;
     timerDisplay.textContent = `${elapsed.toFixed(2)} 秒`;
   }, 10);
@@ -34,7 +35,7 @@ stopButton.addEventListener("click", () => {
   const name = prompt("名前を入力してください（ランキング用）:");
   if (!name) return;
 
-  fetch("【あなたのWebアプリURL】", {
+  fetch("https://script.google.com/macros/s/AKfycbyEFx_oRczBlh2AVU_20jjDU7-gExMiMeo883v5VO_gd--j2ERvmPg9QkFOFIxRLlPC5A/exec", {
     method: "POST",
     contentType: "application/json",
     body: JSON.stringify({ name: name, time: finalTime })
