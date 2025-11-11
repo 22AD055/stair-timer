@@ -17,7 +17,7 @@ if (isValidQR) {
 function startTimer() {
   document.getElementById('message').textContent = "計測中！2階のQRを読み込んでください。";
   const startTime = Date.now();
-  localStorage.setItem("startTime", Date.now()); // 端末内に保存（ゴールページで使う）
+  localStorage.setItem("startTime", startTime); // 端末内に保存（ゴールページで使う）
 
   const timerDisplay = document.getElementById('timer');
   setInterval(() => {
